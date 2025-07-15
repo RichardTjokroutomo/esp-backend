@@ -2,10 +2,11 @@ from flask import Flask, request, send_file, jsonify
 import requests
 import os
 import io
+import traceback
 
 app = Flask(__name__)
 
-OPENAI_API_KEY = "..."  # your actual key here
+OPENAI_API_KEY = ""  # your actual key here
 TRANSCRIBE_MODEL = "whisper-1"
 CHAT_MODEL = "gpt-4o"
 TTS_MODEL = "tts-1"  # or "tts-1-hd"
@@ -86,8 +87,10 @@ def chatgpt_audio():
         )
 
     except requests.exceptions.HTTPError as e:
+        traceback.print_exc()
         return jsonify({"error": f"{e} | Response: {e.response.text}"}), 500
     except Exception as e:
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
